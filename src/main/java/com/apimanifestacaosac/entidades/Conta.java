@@ -28,6 +28,7 @@ public class Conta {
     private Long numConta;
     @Column(nullable = false)
     private Tipo_Pessoa tipo_pessoa;
+    private Boolean status;
     @Column(nullable = false)
     private LocalDateTime dataCadastro;
 

@@ -39,6 +39,7 @@ public class ContaService {
                     .titular(dto.getTitular())
                     .numConta(dto.getNumConta())
                     .tipo_pessoa(cliente.getTipo_pessoa())
+                            .status(true)
                     .dataCadastro(LocalDateTime.now())
                     .build()));
     }

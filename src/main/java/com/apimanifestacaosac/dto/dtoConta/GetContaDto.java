@@ -18,6 +18,7 @@ public class GetContaDto {
 
     private Tipo_Pessoa tipo_pessoa;
 
+    private Boolean status;
     private LocalDateTime dataCadastro;
     private Cliente cliente;
 
@@ -29,6 +30,7 @@ public class GetContaDto {
         this.numConta = conta.getNumConta();
         this.tipo_pessoa = conta.getTipo_pessoa();
         this.cliente = conta.getCliente();
+        this.status = conta.getStatus();
         this.dataCadastro = conta.getDataCadastro();
     }
 }
