@@ -25,7 +25,6 @@ public class ClienteService {
         this.repository = repository;
         this.telefoneRepository = telefoneRepository;
     }
-
     public ClienteGetDto cadastraCliente(CadastroClienteDto dto) throws Exception {
 
         Cliente cliente;
@@ -70,25 +69,29 @@ public class ClienteService {
 
     public ClienteGetDto atualizaTelefoneCliente(Integer id, CadastroTelefoneDto dto) throws Throwable {
 
-        Optional<Cliente> byId = repository.findById(id);
+        Optional<Cliente> byId = repository.findById(id); /* Localizar Cliente*/
 
-        if (byId.isPresent()) {
-            List<Telefone> telefones = byId.get().getTelefone();
+        if (byId.isPresent()) {  /*Cliente esta presente?*/
+            List<Telefone> telefones = byId.get().getTelefone(); /*Se sim pegue a lista de telefones deste cliente*/
             try {
-                telefones.add(Telefone.builder().ddd(dto.getDdd()).numTelefone(dto.getNumTelefone()).tipo_telefone(dto.getTipo_telefone()).build());
-                telefones.forEach(t -> telefoneRepository.save(t));
+                Telefone novoTelefone = Telefone.builder() // cria novo telefone
+                        .ddd(dto.getDdd())
+                        .numTelefone(dto.getNumTelefone())
+                        .tipo_telefone(dto.getTipo_telefone()).build();
+                telefones.add(novoTelefone);/*Adiciona novo telefone na lista*/
+
+                telefoneRepository.save(novoTelefone);// atualiza no banco todos os elementos deste
             } catch (Exception e) {
                 throw new RuntimeException("Algum dado necessário faltando");
             }
 
-            return new ClienteGetDto(
-                    repository.save(Cliente.builder()
+            return new ClienteGetDto(Cliente.builder() // retorna o dto com dados do cliente e todos os telefones atualizado
                             .id(byId.get().getId())
                             .nome(byId.get().getNome())
                             .cpf(byId.get().getCpf())
                             .email(byId.get().getEmail())
-                                    .tipo_pessoa(byId.get().getTipo_pessoa())
-                            .telefone(telefones).build()));
+                            .tipo_pessoa(byId.get().getTipo_pessoa())
+                            .telefone(telefones).build());
         } else
             throw new Exception("Cliente nao encontrado");
     }

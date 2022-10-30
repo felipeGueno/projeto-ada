@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
 
 import java.time.LocalDateTime;
 
@@ -32,7 +33,7 @@ public class Conta {
     @Column(nullable = false)
     private LocalDateTime dataCadastro;
 
-    @ManyToOne
+    @ManyToOne (cascade = CascadeType.DETACH)
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;
 

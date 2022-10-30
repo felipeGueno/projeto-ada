@@ -56,4 +56,29 @@ public class ContaService {
 
         return listaRetorno;
     }
+
+    public List<GetContaDto> buscaTodasAsContas() {
+        List<GetContaDto> listaRetorno = new ArrayList<>();
+        Iterable<Conta> all = contaRepository.findAll();
+        all.forEach(conta -> listaRetorno.add(new GetContaDto(conta)));
+
+        return listaRetorno;
+    }
+
+    public GetContaDto inativarConta(Integer agencia, Long numConta) {
+
+        Optional<Conta> byAgenciaAndNumConta = contaRepository.findByAgenciaAndNumConta(agencia, numConta);
+        Boolean novoStatus = false;
+        byAgenciaAndNumConta.ifPresent(conta -> contaRepository.save(Conta.builder()
+                .agencia(conta.getAgencia())
+                .numConta(conta.getNumConta())
+                .id(conta.getId())
+                .status(novoStatus)
+                .dataCadastro(conta.getDataCadastro())
+                .tipo_pessoa(conta.getTipo_pessoa()).cliente(conta.getCliente())
+                .titular(conta.getTitular()).build()));
+
+
+        return new GetContaDto(byAgenciaAndNumConta.get());
+    }
 }

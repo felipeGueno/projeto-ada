@@ -9,6 +9,5 @@ import java.util.*;
 public interface ContaRepository extends CrudRepository<Conta, Integer> {
     Optional<Conta> findByAgenciaAndNumConta(Integer agencia, Long numConta);
 
-
     List<Conta> findAllByCliente(Optional<Cliente> cliente);
 }

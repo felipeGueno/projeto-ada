@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/clientes")
 public class ClienteController {
@@ -21,14 +23,14 @@ public class ClienteController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> cadastraCliente (@RequestBody CadastroClienteDto dto) throws Exception {
+    public ResponseEntity<Object> cadastraCliente (@RequestBody  @Valid CadastroClienteDto dto) throws Exception {
         ClienteGetDto clienteGetDto = service.cadastraCliente(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body("Cliente " + clienteGetDto.getNome() + " cadastrado com sucesso");
 
     }
 
     @PatchMapping("/telefone/{id}")
-    public ResponseEntity<Object> atualizaTelefoneCliente(@PathVariable Integer id, @RequestBody CadastroTelefoneDto dto) throws Throwable {
+    public ResponseEntity<Object> atualizaTelefoneCliente(@PathVariable Integer id, @RequestBody @Valid CadastroTelefoneDto dto) throws Throwable {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(service.atualizaTelefoneCliente(id, dto));
     }
 

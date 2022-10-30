@@ -15,12 +15,14 @@ public class GetContasPorCpf {
 
     private Long numConta;
 
+    private Boolean status;
     private Tipo_Pessoa tipo_pessoa;
 
     public GetContasPorCpf(Conta conta) {
         this.titular = conta.getTitular();
         this.agencia = conta.getAgencia();
         this.numConta = conta.getNumConta();
+        this.status = conta.getStatus();
         this.tipo_pessoa = conta.getTipo_pessoa();
     }
 }

@@ -4,16 +4,18 @@ import com.apimanifestacaosac.enums.Tipo_Pessoa;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import javax.validation.constraints.NotBlank;
+
 @Getter
 @AllArgsConstructor
 public class CadastroContaDto {
 
+    @NotBlank
     private Integer titular;
-
+    @NotBlank
     private Integer agencia;
-
+    @NotBlank
     private Long numConta;
-
 
 
 }
