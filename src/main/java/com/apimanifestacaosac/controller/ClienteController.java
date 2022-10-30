@@ -45,7 +45,7 @@ public class ClienteController {
 
     @GetMapping("/{cpf}")
     public ResponseEntity<ClienteGetDto> buscaclientePorCpf (@PathVariable String cpf) throws Throwable {
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(service.buscaclientePorId(cpf));
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(service.buscaclientePorCpf(cpf));
     }
 
 

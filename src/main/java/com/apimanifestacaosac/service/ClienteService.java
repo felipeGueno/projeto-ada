@@ -72,8 +72,6 @@ public class ClienteService {
 
         Optional<Cliente> byId = repository.findById(id);
 
-        Cliente clienteFinal;
-
         if (byId.isPresent()) {
             List<Telefone> telefones = byId.get().getTelefone();
             try {
@@ -95,7 +93,7 @@ public class ClienteService {
             throw new Exception("Cliente nao encontrado");
     }
 
-    public ClienteGetDto buscaclientePorId(String cpf) throws Throwable {
+    public ClienteGetDto buscaclientePorCpf(String cpf) throws Throwable {
 
         Cliente clienteEncontrado = repository.findByCpf(cpf).orElseThrow(() -> new Throwable("Cliente não existe"));
 

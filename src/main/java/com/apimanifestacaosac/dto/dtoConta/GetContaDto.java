@@ -5,6 +5,8 @@ import com.apimanifestacaosac.entidades.Conta;
 import com.apimanifestacaosac.enums.Tipo_Pessoa;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 @Getter
 public class GetContaDto {
 
@@ -16,7 +18,10 @@ public class GetContaDto {
 
     private Tipo_Pessoa tipo_pessoa;
 
+    private LocalDateTime dataCadastro;
     private Cliente cliente;
+
+
 
     public GetContaDto(Conta conta) {
         this.titular = conta.getTitular();
@@ -24,5 +29,6 @@ public class GetContaDto {
         this.numConta = conta.getNumConta();
         this.tipo_pessoa = conta.getTipo_pessoa();
         this.cliente = conta.getCliente();
+        this.dataCadastro = conta.getDataCadastro();
     }
 }
