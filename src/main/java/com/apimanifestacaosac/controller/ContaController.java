@@ -25,7 +25,7 @@ public class ContaController {
     }
 
     @PostMapping("/{cpfCliente}")
-    public ResponseEntity<GetContaDto> cadastraNovaConta(@RequestBody @Valid CadastroContaDto dto,
+    public ResponseEntity<GetContaDto> cadastraNovaConta(@RequestBody CadastroContaDto dto,
                                                          @PathVariable String cpfCliente) throws Throwable {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(contaService.cadastraNovaConta(dto, cpfCliente));
@@ -52,5 +52,13 @@ public class ContaController {
     public ResponseEntity<GetContaDto> inativarConta(@PathVariable Integer agencia,
                                      @PathVariable Long numConta){
         return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT).body(contaService.inativarConta(agencia, numConta));
+    }
+
+    @DeleteMapping("/{agencia}/{numConta}")
+    public ResponseEntity<GetContaDto> deletaConta(@PathVariable Integer agencia,
+                                                   @PathVariable Long numConta) throws Throwable {
+
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(contaService.deletaConta(agencia, numConta));
+
     }
 }

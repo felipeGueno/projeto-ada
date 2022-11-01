@@ -28,7 +28,7 @@ public class ClienteService {
     public ClienteGetDto cadastraCliente(CadastroClienteDto dto) throws Exception {
 
         Cliente cliente;
-//        try {
+
             if (Optional.ofNullable(dto.getTelefones()).isPresent()) {
                 cliente = Cliente.builder()
                         .nome(dto.getNome())
@@ -43,9 +43,6 @@ public class ClienteService {
                 cliente = new Cliente(null, dto.getNome(), dto.getCpf(), dto.getEmail(), dto.getTipo_pessoa());
                 repository.save(cliente);
             }
-//        } catch (Exception e) {
-//            throw new Exception("Algum dado necessário não foi inserido");
-//        }
 
         return new ClienteGetDto(cliente);
     }
@@ -83,15 +80,17 @@ public class ClienteService {
                 telefoneRepository.save(novoTelefone);// atualiza no banco todos os elementos deste
             } catch (Exception e) {
                 throw new RuntimeException("Algum dado necessário faltando");
+
+
             }
 
-            return new ClienteGetDto(Cliente.builder() // retorna o dto com dados do cliente e todos os telefones atualizado
-                            .id(byId.get().getId())
-                            .nome(byId.get().getNome())
-                            .cpf(byId.get().getCpf())
-                            .email(byId.get().getEmail())
-                            .tipo_pessoa(byId.get().getTipo_pessoa())
-                            .telefone(telefones).build());
+            return new ClienteGetDto(repository.save(Cliente.builder() // retorna o dto com dados do cliente e todos os telefones atualizado
+                    .id(byId.get().getId())
+                    .nome(byId.get().getNome())
+                    .cpf(byId.get().getCpf())
+                    .email(byId.get().getEmail())
+                    .tipo_pessoa(byId.get().getTipo_pessoa())
+                    .telefone(telefones).build()));
         } else
             throw new Exception("Cliente nao encontrado");
     }
@@ -102,5 +101,6 @@ public class ClienteService {
 
         return new ClienteGetDto(clienteEncontrado);
     }
+
 
 }

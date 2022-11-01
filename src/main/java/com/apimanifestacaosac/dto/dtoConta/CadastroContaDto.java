@@ -1,10 +1,10 @@
 package com.apimanifestacaosac.dto.dtoConta;
 
-import com.apimanifestacaosac.enums.Tipo_Pessoa;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import javax.validation.constraints.NotBlank;
+
 
 @Getter
 @AllArgsConstructor

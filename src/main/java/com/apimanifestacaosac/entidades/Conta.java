@@ -33,7 +33,7 @@ public class Conta {
     @Column(nullable = false)
     private LocalDateTime dataCadastro;
 
-    @ManyToOne (cascade = CascadeType.DETACH)
+    @ManyToOne()
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;
 

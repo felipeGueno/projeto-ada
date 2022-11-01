@@ -2,14 +2,10 @@ package com.apimanifestacaosac.enums;
 
 public enum Departamento {
 
-    AOC("AOC"),
-    DCPS("DCPS"),
-    DEF("DEF"),
-    AGENCIA("AGENCIA");
+    AOC,
+    DCPS,
+    DEF,
+    AGENCIA,
+    TECNOLOGIA_DA_INFORMACAO
 
-    private String nome;
-
-    Departamento(String nome) {
-        this.nome = nome;
-    }
 }

@@ -1,6 +1,7 @@
 package com.apimanifestacaosac.service;
 
 
+import com.apimanifestacaosac.dto.dtoCliente.ClienteGetDto;
 import com.apimanifestacaosac.dto.dtoConta.CadastroContaDto;
 import com.apimanifestacaosac.dto.dtoConta.GetContaDto;
 import com.apimanifestacaosac.dto.dtoConta.GetContasPorCpf;
@@ -15,6 +16,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 @Service
 public class ContaService {
@@ -39,7 +42,7 @@ public class ContaService {
                     .titular(dto.getTitular())
                     .numConta(dto.getNumConta())
                     .tipo_pessoa(cliente.getTipo_pessoa())
-                            .status(true)
+                    .status(true)
                     .dataCadastro(LocalDateTime.now())
                     .build()));
     }
@@ -81,4 +84,14 @@ public class ContaService {
 
         return new GetContaDto(byAgenciaAndNumConta.get());
     }
+
+    public GetContaDto deletaConta(Integer agencia, Long numConta) throws Throwable {
+
+        Optional<Conta> byAgenciaAndNumConta = contaRepository.findByAgenciaAndNumConta(agencia, numConta);
+        byAgenciaAndNumConta.ifPresent(conta -> contaRepository.delete(conta));
+
+        return new GetContaDto(byAgenciaAndNumConta.orElseThrow(() -> new Throwable("Cliente nao encontrado")));
+
+    }
+
 }
