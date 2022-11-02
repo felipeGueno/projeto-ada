@@ -24,7 +24,7 @@ public class Cliente {
     private String email;
     private Tipo_Pessoa tipo_pessoa;
 
-    @OneToMany(fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.PERSIST)
+    @OneToMany(fetch = FetchType.EAGER, orphanRemoval = true)
     @JoinColumn(name = "cliente_id")
     private List<Telefone> telefone;
 

@@ -5,6 +5,7 @@ import com.apimanifestacaosac.entidades.Telefone;
 import com.apimanifestacaosac.enums.Tipo_Pessoa;
 import com.apimanifestacaosac.enums.Tipo_Telefone;
 import com.apimanifestacaosac.repository.ClienteRepository;
+import com.apimanifestacaosac.repository.TelefoneRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -15,6 +16,9 @@ public class ApimanifestacaosacApplication implements CommandLineRunner {
 
 	@Autowired
 	private ClienteRepository repository;
+
+	@Autowired
+	private TelefoneRepository telefoneRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(ApimanifestacaosacApplication.class, args);
@@ -44,10 +48,9 @@ public class ApimanifestacaosacApplication implements CommandLineRunner {
 								Long numTelefone, Tipo_Telefone tipo){
 		List<Telefone> telefones = new ArrayList<>();
 		telefones.add(new Telefone(null, ddd, numTelefone, tipo));
+		telefones.forEach(t -> telefoneRepository.save(t));
 
-		var cliente1 = cliente.toBuilder();
-		Cliente build = cliente1.telefone(telefones).build();
-		return build;
+		return cliente.toBuilder().telefone(telefones).build();
 
 	}
 }

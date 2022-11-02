@@ -30,6 +30,7 @@ public class ClienteService {
         Cliente cliente;
 
             if (Optional.ofNullable(dto.getTelefones()).isPresent()) {
+                dto.getTelefones().forEach(t -> telefoneRepository.save(t));
                 cliente = Cliente.builder()
                         .nome(dto.getNome())
                         .cpf(dto.getCpf())
