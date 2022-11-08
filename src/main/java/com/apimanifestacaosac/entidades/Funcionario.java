@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
+import java.util.*;
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 
@@ -26,6 +26,11 @@ public class Funcionario {
     private String email;
     private Departamento departamento;
     private Cargo cargo;
+
+    private Boolean ativo;
+
+//    @ManyToMany(mappedBy = )
+//    List <SituacaoProtocolo> situacaoProtocoloList;
 
 
 }

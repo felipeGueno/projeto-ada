@@ -7,8 +7,12 @@ import com.apimanifestacaosac.dto.dtoProtocolo.CadastroProtocoloDto;
 import com.apimanifestacaosac.entidades.Cliente;
 import com.apimanifestacaosac.entidades.Funcionario;
 import com.apimanifestacaosac.entidades.Protocolo;
+import com.apimanifestacaosac.entidades.SituacaoProtocolo;
+import com.apimanifestacaosac.enums.StatusProtocolo;
 import com.apimanifestacaosac.repository.ClienteRepository;
+import com.apimanifestacaosac.repository.FuncionaRepository;
 import com.apimanifestacaosac.repository.ProtocoloRepository;
+import com.apimanifestacaosac.repository.SituacaoProtocoloRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,17 +20,24 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 public class ProtocoloService {
 
-    ProtocoloRepository protocoloRepository;
+    private ProtocoloRepository protocoloRepository;
 
-    ClienteRepository clienteRepository;
+    private ClienteRepository clienteRepository;
+
+    private FuncionaRepository funcionaRepository;
+
+    private SituacaoProtocoloRepository situacaoProtocoloRepository;
     @Autowired
-    public ProtocoloService(ProtocoloRepository protocoloRepository, ClienteRepository clienteRepository) {
+    public ProtocoloService(ProtocoloRepository protocoloRepository, ClienteRepository clienteRepository, FuncionaRepository funcionaRepository, SituacaoProtocoloRepository situacaoProtocoloRepository) {
         this.protocoloRepository = protocoloRepository;
         this.clienteRepository = clienteRepository;
+        this.funcionaRepository = funcionaRepository;
+        this.situacaoProtocoloRepository = situacaoProtocoloRepository;
     }
 
 
@@ -36,17 +47,37 @@ public class ProtocoloService {
 
             Optional<Cliente> byCpf = clienteRepository.findByCpf(dto.getCpfCliente());
 
-            return new CadastroGetProtocoloDto(protocoloRepository.save(Protocolo.builder()
+            Protocolo protocoloSalvo = protocoloRepository.save(Protocolo.builder()
                     .descricao(dto.getDescricao())
                     .dataAbertura(LocalDateTime.now())
                     .canal(dto.getCanal())
-                    .dataPrazo(LocalDateTime.now().plusDays(5))
+                    .dataPrazo(LocalDateTime.now().plusDays(dto.getTipo_protocolo().prazo))
                     .dptoRespons(dto.getDptoRespons())
+                    .tipo_protocolo(dto.getTipo_protocolo())
                     .cliente(byCpf.orElseThrow())
-                    .build()));
+                    .situacaoProtocolo(criaSituacaoProtocolo())
+                    .build());
+
+//                    .protocolo(protocoloSalvo)
+//                    .statusProtocolo(StatusProtocolo.NOVO)
+//                    .funcionario(allByAtivo.get(new Random().nextInt(allByAtivo.size()))).build()
+
+            return new CadastroGetProtocoloDto(protocoloSalvo);
         } else
         throw new RuntimeException("Todos os campos devem ser preenchidos");
     }
+
+    private List<SituacaoProtocolo> criaSituacaoProtocolo() {
+        List<SituacaoProtocolo> situacoesDeUmProtocolo = new ArrayList<>();
+
+        situacoesDeUmProtocolo.add(situacaoProtocoloRepository.save(SituacaoProtocolo.builder()
+                .statusProtocolo(StatusProtocolo.NOVO)
+                .build()));
+
+        return situacoesDeUmProtocolo;
+    }
+
+
 
 
     public List<CadastroGetProtocoloDto> buscaTodosProcolos() {

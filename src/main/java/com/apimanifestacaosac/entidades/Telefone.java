@@ -17,7 +17,7 @@ public class Telefone {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id ;
-    @Column
+    @Column(nullable = false)
     private Integer ddd;
     @Column(nullable = false)
     private Long numTelefone;

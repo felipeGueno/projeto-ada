@@ -2,11 +2,12 @@ package com.apimanifestacaosac.entidades;
 
 import com.apimanifestacaosac.enums.Canal;
 import com.apimanifestacaosac.enums.Departamento;
+import com.apimanifestacaosac.enums.Tipo_Protocolo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
+import java.util.*;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.temporal.TemporalAdjuster;
@@ -43,6 +44,12 @@ public class Protocolo {
     private Canal canal;
     @Column(nullable = false)
     private Departamento dptoRespons;
+
+    private Tipo_Protocolo tipo_protocolo;
+
+    @OneToMany
+    private List<SituacaoProtocolo> situacaoProtocolo;
+
     @ManyToOne
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;

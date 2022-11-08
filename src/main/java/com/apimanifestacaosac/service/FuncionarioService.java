@@ -31,6 +31,7 @@ public class FuncionarioService {
                             .email(dto.getEmail())
                             .cargo(dto.getCargo())
                             .departamento(dto.getDepartamento())
+                            .ativo(true)
                             .build()));
         }
         else
