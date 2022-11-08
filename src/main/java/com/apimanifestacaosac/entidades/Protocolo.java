@@ -36,6 +36,10 @@ public class Protocolo {
     private LocalDateTime dataPrazo;
     private LocalDateTime dataUltAcao;
 
+    /**
+     * ALTERAR PARA SITUACAO DO PROTOCOLO
+     * */
+
     private Boolean propensaoBacen;
     private Boolean agilizar;
     private Boolean procedente;

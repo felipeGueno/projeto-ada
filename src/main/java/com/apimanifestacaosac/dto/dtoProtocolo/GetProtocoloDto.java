@@ -12,7 +12,7 @@ import java.util.*;
 import java.time.LocalDateTime;
 
 @Getter
-public class CadastroGetProtocoloDto {
+public class GetProtocoloDto {
 
     private Integer numeroProtocolo;
 
@@ -31,7 +31,9 @@ public class CadastroGetProtocoloDto {
 
     private List<SituacaoProtocolo> situacaoProtocolo;
 
-    public CadastroGetProtocoloDto(Protocolo protocolo) {
+    private Boolean agilizar;
+
+    public GetProtocoloDto(Protocolo protocolo) {
         this.numeroProtocolo = protocolo.getNumeroProtocolo();
         this.descricao = protocolo.getDescricao();
         this.dataAbertura = protocolo.getDataAbertura();
@@ -41,5 +43,6 @@ public class CadastroGetProtocoloDto {
         this.cliente = protocolo.getCliente();
         this.situacaoProtocolo = protocolo.getSituacaoProtocolo();
         this.tipo_protocolo = protocolo.getTipo_protocolo();
+        this.agilizar = protocolo.getAgilizar();
     }
 }

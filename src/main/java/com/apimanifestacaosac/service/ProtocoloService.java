@@ -1,11 +1,10 @@
 package com.apimanifestacaosac.service;
 
 import com.apimanifestacaosac.Verificacao;
-import com.apimanifestacaosac.dto.dtoCliente.ClienteGetDto;
-import com.apimanifestacaosac.dto.dtoProtocolo.CadastroGetProtocoloDto;
+import com.apimanifestacaosac.controller.ProtocoloController;
+import com.apimanifestacaosac.dto.dtoProtocolo.GetProtocoloDto;
 import com.apimanifestacaosac.dto.dtoProtocolo.CadastroProtocoloDto;
 import com.apimanifestacaosac.entidades.Cliente;
-import com.apimanifestacaosac.entidades.Funcionario;
 import com.apimanifestacaosac.entidades.Protocolo;
 import com.apimanifestacaosac.entidades.SituacaoProtocolo;
 import com.apimanifestacaosac.enums.StatusProtocolo;
@@ -20,7 +19,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 
 @Service
 public class ProtocoloService {
@@ -41,7 +39,7 @@ public class ProtocoloService {
     }
 
 
-    public CadastroGetProtocoloDto cadastraProtocolo (CadastroProtocoloDto dto) throws IllegalAccessException {
+    public GetProtocoloDto cadastraProtocolo (CadastroProtocoloDto dto) throws IllegalAccessException {
 
         if(Verificacao.verificaTodosCampoNulos(dto).size() == 0) {
 
@@ -62,7 +60,7 @@ public class ProtocoloService {
 //                    .statusProtocolo(StatusProtocolo.NOVO)
 //                    .funcionario(allByAtivo.get(new Random().nextInt(allByAtivo.size()))).build()
 
-            return new CadastroGetProtocoloDto(protocoloSalvo);
+            return new GetProtocoloDto(protocoloSalvo);
         } else
         throw new RuntimeException("Todos os campos devem ser preenchidos");
     }
@@ -80,13 +78,32 @@ public class ProtocoloService {
 
 
 
-    public List<CadastroGetProtocoloDto> buscaTodosProcolos() {
+    public List<GetProtocoloDto> buscaTodosProcolos() {
 
-        List<CadastroGetProtocoloDto> listaRetorno = new ArrayList<>();
+        List<GetProtocoloDto> listaRetorno = new ArrayList<>();
 
         protocoloRepository.findAll()
-                .forEach(protocolo -> listaRetorno.add(new CadastroGetProtocoloDto(protocolo)));
+                .forEach(protocolo -> listaRetorno.add(new GetProtocoloDto(protocolo)));
 
         return listaRetorno;
+    }
+
+    public String distribuiProtocolos() {
+
+
+        return "Protocolos Distribuidos com sucesso";
+    }
+
+    public GetProtocoloDto agilizaProtocolo(Integer numProtocolo) {
+
+        Optional<Protocolo> protocoloEncontrado = protocoloRepository.findById(numProtocolo);
+
+        if (protocoloEncontrado.isPresent()){
+
+            return new GetProtocoloDto(protocoloRepository.save(protocoloEncontrado.get().toBuilder().agilizar(true).build()));
+
+        }
+        else
+            throw new RuntimeException("Protocolo não encontrado");
     }
 }

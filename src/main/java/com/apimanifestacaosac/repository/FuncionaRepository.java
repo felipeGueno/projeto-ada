@@ -8,4 +8,5 @@ public interface FuncionaRepository extends CrudRepository<Funcionario, Integer>
 
 
     List<Funcionario> findAllByAtivo(Boolean ativo);
+
 }
