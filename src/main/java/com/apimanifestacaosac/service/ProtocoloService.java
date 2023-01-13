@@ -1,24 +1,17 @@
 package com.apimanifestacaosac.service;
 
 import com.apimanifestacaosac.Verificacao;
-import com.apimanifestacaosac.controller.ProtocoloController;
 import com.apimanifestacaosac.dto.dtoProtocolo.GetProtocoloDto;
 import com.apimanifestacaosac.dto.dtoProtocolo.CadastroProtocoloDto;
-import com.apimanifestacaosac.entidades.Cliente;
-import com.apimanifestacaosac.entidades.Protocolo;
-import com.apimanifestacaosac.entidades.SituacaoProtocolo;
+import com.apimanifestacaosac.entidades.*;
 import com.apimanifestacaosac.enums.StatusProtocolo;
-import com.apimanifestacaosac.repository.ClienteRepository;
-import com.apimanifestacaosac.repository.FuncionaRepository;
-import com.apimanifestacaosac.repository.ProtocoloRepository;
-import com.apimanifestacaosac.repository.SituacaoProtocoloRepository;
+import com.apimanifestacaosac.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Stream;
 
 @Service
 public class ProtocoloService {
@@ -30,6 +23,9 @@ public class ProtocoloService {
     private FuncionaRepository funcionaRepository;
 
     private SituacaoProtocoloRepository situacaoProtocoloRepository;
+
+    private FuncionarioComProtocoloRepository funcionarioComProtocoloRepository;
+
     @Autowired
     public ProtocoloService(ProtocoloRepository protocoloRepository, ClienteRepository clienteRepository, FuncionaRepository funcionaRepository, SituacaoProtocoloRepository situacaoProtocoloRepository) {
         this.protocoloRepository = protocoloRepository;
@@ -39,9 +35,9 @@ public class ProtocoloService {
     }
 
 
-    public GetProtocoloDto cadastraProtocolo (CadastroProtocoloDto dto) throws IllegalAccessException {
+    public GetProtocoloDto cadastraProtocolo(CadastroProtocoloDto dto) throws IllegalAccessException {
 
-        if(Verificacao.verificaTodosCampoNulos(dto).size() == 0) {
+        if (Verificacao.verificaTodosCampoNulos(dto).size() == 0) {
 
             Optional<Cliente> byCpf = clienteRepository.findByCpf(dto.getCpfCliente());
 
@@ -62,7 +58,8 @@ public class ProtocoloService {
 
             return new GetProtocoloDto(protocoloSalvo);
         } else
-        throw new RuntimeException("Todos os campos devem ser preenchidos");
+
+            throw new RuntimeException("Todos os campos devem ser preenchidos");
     }
 
     private List<SituacaoProtocolo> criaSituacaoProtocolo() {
@@ -74,8 +71,6 @@ public class ProtocoloService {
 
         return situacoesDeUmProtocolo;
     }
-
-
 
 
     public List<GetProtocoloDto> buscaTodosProcolos() {
@@ -90,20 +85,62 @@ public class ProtocoloService {
 
     public String distribuiProtocolos() {
 
+        List<Protocolo> listaProtocolos = new ArrayList<>();
+        Iterable<Protocolo> all = protocoloRepository.findAll();
+        List<Funcionario> allByAtivo = funcionaRepository.findAllByAtivo(true);
+        all.forEach(listaProtocolos::add);
+
+        for (Protocolo protocolo : listaProtocolos) {
+
+            if (protocolo.getSituacaoProtocolo().stream().map(SituacaoProtocolo::getFuncionario)
+                    .allMatch(Objects::isNull)) {
+
+                protocolo.getSituacaoProtocolo()
+                        .add(situacaoProtocoloRepository.save(SituacaoProtocolo.builder().funcionario(allByAtivo.get(new Random().nextInt(allByAtivo.size())))
+                                .statusProtocolo(StatusProtocolo.NAO_INICIADO)
+                                .build()));
+
+                protocoloRepository.save(protocolo);
+
+            }
+
+        }
 
         return "Protocolos Distribuidos com sucesso";
+    }
+
+
+    private FuncionarioComProtocolo atribuiFuncionarioAoProtocolo(Funcionario funcionario, Protocolo protocolo) {
+        Optional<FuncionarioComProtocolo> byFuncionario = funcionarioComProtocoloRepository.findByFuncionario(funcionario);
+        if (byFuncionario.isPresent()) {
+            byFuncionario.get().getProtocolosComFuncionario().add(protocolo);
+            return funcionarioComProtocoloRepository.save(byFuncionario.get());
+
+        } else
+            return funcionarioComProtocoloRepository.save(FuncionarioComProtocolo.builder().funcionario(funcionario).build());
+
+//        protocolo.getSituacaoProtocolo().add(
+//                situacaoProtocoloRepository.save(SituacaoProtocolo.builder()
+//                        .statusProtocolo(StatusProtocolo.NAO_INICIADO)
+//                        .funcionario(funcionario).build()));
+
+
+    }
+
+    private int qntProtocolosPorFuncionario(FuncionarioComProtocolo funcionarioComProtocolo) {
+
+        return funcionarioComProtocolo.getProtocolosComFuncionario().size();
     }
 
     public GetProtocoloDto agilizaProtocolo(Integer numProtocolo) {
 
         Optional<Protocolo> protocoloEncontrado = protocoloRepository.findById(numProtocolo);
 
-        if (protocoloEncontrado.isPresent()){
+        if (protocoloEncontrado.isPresent()) {
 
             return new GetProtocoloDto(protocoloRepository.save(protocoloEncontrado.get().toBuilder().agilizar(true).build()));
 
-        }
-        else
+        } else
             throw new RuntimeException("Protocolo não encontrado");
     }
 }

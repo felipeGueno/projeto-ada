@@ -12,6 +12,7 @@ import java.util.Optional;
 public class ClienteGetDto {
 
 
+    private Integer id;
     private String nome;
 
     private String cpf;
@@ -23,6 +24,7 @@ public class ClienteGetDto {
 
     public ClienteGetDto(Cliente cliente) {
 
+        this.id = cliente.getId();
         this.nome = cliente.getNome();
         this.cpf = cliente.getCpf();
         this.email = cliente.getEmail();

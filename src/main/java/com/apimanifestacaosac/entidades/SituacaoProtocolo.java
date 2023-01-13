@@ -24,8 +24,8 @@ public class SituacaoProtocolo {
 
     private String respostaProtocolo;
 
-    @ManyToMany
-    private List<Funcionario> funcionario;
+    @OneToOne
+    private Funcionario funcionario;
     @Column(nullable = false)
     private StatusProtocolo statusProtocolo;
 

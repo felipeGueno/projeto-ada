@@ -29,8 +29,6 @@ public class Funcionario {
 
     private Boolean ativo;
 
-//    @ManyToMany(mappedBy = )
-//    List <SituacaoProtocolo> situacaoProtocoloList;
 
 
 }
